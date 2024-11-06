@@ -1,0 +1,26 @@
+Classe d'avui:
+
+- Generació dels codis
+    - Tots els sorting algorithms </src/main.cpp> fet en cpp 
+    - El generador per el benchmark </src/generador.py> fet en python
+
+- Generació del benchmark
+    Per generar el benchmark s'ha executat la comanda següent a una terminal <zsh>:
+    › time python3 generador.py > bench.txt 
+
+    De forma que hem generat el fitxer <bench.txt>, a sota hi ha el que ha tardat en generar el fitxer en total, probablement en cpp hagués anat més ràpid
+    python3 generador.py > bench.txt  566,07s user 2,95s system 99% cpu 9:29,10 total
+
+Aquest fitxer l'hem ubicat a </src/benchs/bench.txt> i serà el pare de tots els altres fitxers que es generin de proves
+Ja que la nostra pregunta plantejada tracta la velocitat respecte la memòria que s'utilitza, hem generat un fitxer amb 1000000000 dades.
+
+Tot el que s'ha fet de moment és simulable
+
+Planificació per la següent classe:
+
+- Generació dels altres benchs
+
+- Simulació per els diferents algorismes (modificant certes variables)
+
+- Creació de la taula en R
+    - explicar que és cada dada
