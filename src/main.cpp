@@ -1,6 +1,8 @@
 #include <vector>
 #include <bits/stdc++.h>
 #include <chrono>
+#include <iostream>
+#include <fstream>
 using namespace std;
 typedef vector<int> Vector;
 
@@ -168,16 +170,32 @@ void insertionSort(std::vector<int> &vec)
     } 
 } 
 
-void llegirFitxer(Vector&vector) {
+void llegirFitxer(Vector&vector, int nLinies) {
+    cout << "Insert the file path";
+    string path;
+    cin>>path;
+    ifstream file(path);
+    if (!file) {
+        cerr << "Error: File not found" << endl;
+        return;
+    }
+    int value;
+    int readedLines = 0;
+    while(file>>value && readedLines <= nLinies) {
+        vector.push_back(value);
+        readedLines++;
+    }
+    file.close();
+    cout << "Final vector size: " << vector.size() << endl;
 
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     // Crear vector 
     Vector vector;
     
     // Llegir fitxer
-    llegirFitxer(vector);
+    llegirFitxer(vector,atoi(argv[0]));
     
     // Executar els codis
     // Saber quant tarden 
