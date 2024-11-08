@@ -1,0 +1,104 @@
+# Carregar les biblioteques necessàries
+library(Rcpp)
+
+# Carregar el C++ des de l'arxiu
+sourceCpp("sortingAlgorithms.cpp")
+
+# Funció per mesurar i cridar cada algorisme per múltiples fitxers i emmagatzemar els resultats en un data frame
+mesurar_i_ordenar_per_varis_fitxers <- function(directori) {
+  # Obtenir tots els fitxers que coincideixen amb el patró "bench(valor).txt"
+  fitxers <- list.files(path = directori, pattern = "^bench\\d+\\.txt$", full.names = TRUE)
+  
+  # Inicialitzar un data frame buit per guardar els resultats
+  resultats_totals <- data.frame(
+    path = character(),
+    duracio = numeric(),
+    memoria = numeric(),
+    algorisme = character(),
+    num_dades = integer(),
+    stringsAsFactors = FALSE
+  )
+  
+  # Iterar per cada fitxer i mesurar els algorismes
+  for (path in fitxers) {
+    resultats_fitxer <- mesurar_i_ordenar(path)
+    
+    # Afegir els resultats al data frame global
+    resultats_totals <- rbind(resultats_totals, resultats_fitxer)
+  }
+  
+  return(resultats_totals)
+}
+
+# Funció per mesurar i cridar cada algorisme i emmagatzemar els resultats en un data frame
+mesurar_i_ordenar <- function(path) {
+  # Llegir el vector des del fitxer
+  vector <- llegirFitxer(path)
+  
+  # Inicialitzar un data frame buit per guardar els resultats
+  resultats <- data.frame(
+    path = character(),
+    duracio = numeric(),
+    memoria = numeric(),
+    algorisme = character(),
+    num_dades = integer(),
+    stringsAsFactors = FALSE
+  )
+  
+  # Fer còpies per cada algorisme d'ordenació
+  vecQuick <- vector
+  vecMerge <- vector
+  vecBubble <- vector
+  vecSelection <- vector
+  vecInsertion <- vector
+  
+  # Mesurar temps i executar cada algorisme i emmagatzemar els resultats
+  resultats <- rbind(resultats, mesurarAlgorisme(vecQuick, "QuickSort", path))
+  resultats <- rbind(resultats, mesurarAlgorisme(vecMerge, "MergeSort", path))
+  resultats <- rbind(resultats, mesurarAlgorisme(vecBubble, "BubbleSort", path))
+  resultats <- rbind(resultats, mesurarAlgorisme(vecSelection, "SelectionSort", path))
+  resultats <- rbind(resultats, mesurarAlgorisme(vecInsertion, "InsertionSort", path))
+  
+  return(resultats)
+}
+
+# Funció per mesurar un algorisme i retornar els resultats
+mesurarAlgorisme <- function(vec, algorisme, path) {
+  # Mesurar temps
+  temps <- switch(algorisme,
+                  "QuickSort" = medirTempsQuickSort(vec, algorisme),
+                  "MergeSort" = medirTempsMergeSort(vec, algorisme),
+                  "BubbleSort" = medirTempsBubbleSort(vec, algorisme),
+                  "SelectionSort" = medirTempsSelectionSort(vec, algorisme),
+                  "InsertionSort" = medirTempsInsertionSort(vec, algorisme))
+  
+  # Mesurar memòria
+  memoria <- switch(algorisme,
+                    "MergeSort" = medirMemoriaMergeSort(vec),  # Track memory usage for MergeSort
+                    mesurarMemoria(vec))  # Use default memory tracker for other algorithms
+  
+  # Nombre de dades del vector
+  num_dades <- length(vec)
+  
+  # Retornar el resultat com un data frame
+  resultats <- data.frame(
+    path = path,
+    duracio = temps,
+    memoria = memoria,
+    algorisme = algorisme,
+    num_dades = num_dades,
+    stringsAsFactors = FALSE
+  )
+  
+  return(resultats)
+}
+
+# Cridar la funció amb el directori on es troben els fitxers
+directori <- "../benchs"  # Substitueix-ho pel directori correcte
+resultats_final <- mesurar_i_ordenar_per_varis_fitxers(directori)
+
+# Mostrar els resultats
+print(resultats_final)
+
+# Guardar els resultats
+save(resultats_final, file = "resultats_ordenacio.RData")
