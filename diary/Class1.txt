@@ -11,16 +11,16 @@ Classe d'avui:
     De forma que hem generat el fitxer <bench.txt>, a sota hi ha el que ha tardat en generar el fitxer en total, probablement en cpp hagués anat més ràpid
     python3 generador.py > bench.txt  566,07s user 2,95s system 99% cpu 9:29,10 total
 
-Aquest fitxer l'hem ubicat a </src/benchs/bench.txt> i serà el pare de tots els altres fitxers que es generin de proves
 Ja que la nostra pregunta plantejada tracta la velocitat respecte la memòria que s'utilitza, hem generat un fitxer amb 1000000000 dades.
+Aquest fitxer no queda penjat ja que pesa 7,3 GB.
 
 Tot el que s'ha fet de moment és simulable
 
 Planificació per la següent classe:
 
-- Generació dels altres benchs
+- Generació dels altres benchs: DONE
 
-- Simulació per els diferents algorismes (modificant certes variables)
+- Simulació per els diferents algorismes (modificant certes variables): DONE
 
-- Creació de la taula en R
+- Creació de la taula en R: DONE
     - explicar que és cada dada
