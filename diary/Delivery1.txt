@@ -1,0 +1,88 @@
+---
+
+Title: Primera entrega pràctica estadística
+Author: REI
+Date: 09/11/2024
+
+---
+
+# Primera entrega
+
+## Objectius
+- Generar un arxiu amb extensió RData que contingui un data.frame amb la informació obtinguda per donar resposta a la pregunta.
+- Script d'R que genera el fitxer RData
+    - Inclou scripts amb altres llenguatjes que generin scripts intermedis.
+- Arxiu txt amb una breu explicació de com s'ha generat el conjunt de dades i quines dades conté.
+
+## Creació del conjunt de dades
+Per generar el conjunt de dades, ho hem fet basant-nos en la simulació.
+Per poder simular hem hagut de seguir els següents passos:
+1. Crear un benchmark de dades
+2. Crear scripts amb cpp per fer el tractament de les dades
+3. Crear un script amb R que ens generes el data.frame final
+
+Per generar el benchmark, hem creat un script amb python [generador.py](https://github.com/llop10101/Practica-estad/blob/main/src/benchs/generador.py)
+
+```py
+import random
+
+# Fixar la seed per garantir números aleatoris constants
+random.seed(12345)
+
+# Generar números aleatoris en el rang entre 0 i 10.000.000.000
+for _ in range(1000000000):
+    print(random.randint(0, 10000000))
+```
+
+Que executem de la següent forma
+> En terminal linux
+
+```sh
+git clone https://github.com/llop10101/Practica-estad.git
+cd Practica-estad
+```
+
+```sh
+cd src/benchs
+python3 generador.py > bench.txt
+```
+Un cop generat aquest primer fitxer, generem la resta a partir d'aquest mateix i ho fem executant [creadorBenchs.sh](https://github.com/llop10101/Practica-estad/blob/main/src/benchs/creadorBenchs.sh)
+```sh
+#!/bin/bash
+echo "Generating all the benchs, this will last a bit"
+# Definir l'array de valors
+sizes=(10 25 50 75 100 250 500 750 1000 2500 5000 7500 10000 25000 50000 75000 100000 250000 500000 750000)
+
+# Generar els altres fitxers de bench
+for i in "${sizes[@]}"; do
+    head -n "$i" bench.txt > bench"$i".txt
+done
+```
+Això ho farem executant el següent:
+> El fitxer ha de tenir permisos d'execució, si no en té s'ha de fer un chmod 700 sobre aquest
+
+```sh
+cd ../Rscripts
+./creadorBenchs.sh
+```
+Ara que ja tenim tots els benchs generats, hem d'executar el fitxer [RScriptDataFrame.R](https://github.com/llop10101/Practica-estad/blob/main/src/Rscripts/RScriptDataFrame.R)
+Per fer això ho fem obrint RStudio, i executem el codi d'aquest fitxer.
+> El fitxer [sortingAlgorithms.cpp](https://github.com/llop10101/Practica-estad/blob/main/src/Rscripts/sortingAlgorithms.cpp) ha d'existir
+
+Un cop executat l'Script ja s'ha creat el data.frame anomenat [resultats_ordenacio.RData](https://github.com/llop10101/Practica-estad/blob/main/src/Rscripts/resultats_ordenacio.RData).
+
+## Contingut del data.frame
+
+Aquest data.frame conté
+
+-  path: una variable tipus alfa-númerica amb el nom del fitxer sobre el que s'ha executat la ordenació
+-  duracio: una variable númerica que conté el temps en ns que ha trigat en executar-se
+-  memoria: una variable númerica que conté l'espai en memòria que ha ocupat l'algorisme en executar-se
+-  algorisme: una variable alfa-númerica que conté el nom de l'algorisme que s'ha executat
+-  num_dades: una variable númerica el nombre de dades que s'ha ordenat (el nom del fitxer en si ho conté però així és més simple)
+
+### Observacions
+
+> El fitxer bench.txt no s'ordena, només ha servit per crear el conjunt de benchs
+> Tots els fitxers necessaris es poden trobar al [github](https://github.com/llop10101/Practica-estad/tree/main)
+
