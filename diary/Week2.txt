@@ -1,0 +1,13 @@
+TODO:
+
+Fer mes simulacions per cada fitxer per mesurar la variabilitat
+
+Fer estadistica descriptiva sobre les dades (grafics etc) aixo permet descriure-les
+
+Plantejar preguntes
+
+Plantejar hipostesi / pot ser nulla
+
+Definir la precisio que volem
+
+Revisar el pdf de classe, mirar-se els conjunts dels altres grups
