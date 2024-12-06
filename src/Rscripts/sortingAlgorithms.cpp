@@ -178,6 +178,16 @@ size_t mesurarMemoria(const StdVector& vec) {
   mem += vec.size() * sizeof(int);  // Mida de tots els elements
   return mem;
 }
+
+// Funció per mesurar la memòria utilitzada per Quicksort
+// [[Rcpp::export]]
+size_t mesurarMemoriaQuicksort(const StdVector& vec) {
+  size_t mem = sizeof(vec);
+  mem += vec.size() * sizeof(int);
+  mem += log2(vec.size())+1;
+  return mem;
+}
+
 // Funció per mesurar la memòria utilitzada per MergeSort
 // Aquest mètode estima la memòria en funció dels subconjunts creats durant la recursió.
 // [[Rcpp::export]]
